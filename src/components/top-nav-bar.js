@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TopNavBar = () => {
+const TopNavBar = ({ setAuthStatus }) => { // Receive setAuthStatus as a prop
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const classes = useStyles();
 
@@ -48,7 +48,10 @@ const TopNavBar = () => {
               )}
               <Grid item>
                 {isAuthenticated ? (
-                  <Button variant="outlined" color="inherit" onClick={() => logout()}>Logout</Button>
+                  <Button variant="outlined" color="inherit" onClick={() => {
+                    logout();
+                    setAuthStatus(false); // Call setAuthStatus with false when logging out
+                  }}>Logout</Button>
                 ) : (
                   <Button variant="outlined" color="inherit" onClick={() => loginWithRedirect({ redirectUri: process.env.REACT_APP_AUTH0_CALLBACK_URL })}>Sign In</Button>
                 )}

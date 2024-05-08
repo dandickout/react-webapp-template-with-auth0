@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './views/landingPage';
 import About from './views/about';
@@ -10,15 +10,20 @@ import Dashboard from './views/dashboard';
 
 const App = () => {
   const { isAuthenticated, user } = useAuth0();
+  const [authStatus, setAuthStatus] = useState(isAuthenticated);
+
+  useEffect(() => {
+    setAuthStatus(isAuthenticated);
+  }, [isAuthenticated]);
 
   return (
       <Router> 
         <div className="app-container">
-          <TopNavBar isAuthenticated={isAuthenticated} user={user}/>
+          <TopNavBar isAuthenticated={authStatus} user={user} setAuthStatus={setAuthStatus} />
           <div className="main-content">
             <Routes>
               <Route path="/" exact element={<LandingPage />} />
-              {isAuthenticated && (
+              {authStatus && (
                 <>
                   <Route path="/dashboard" exact element={<Dashboard />} />
                   <Route path="/about" element={<About />} />
